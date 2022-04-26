@@ -1,0 +1,109 @@
+<head>
+  <title>Worldle words</title>
+  <script src='./words-es.js' type="text/javascript"></script>
+  <script src='./words-en.js' type="text/javascript"></script>
+  <style>
+    #title {
+      text-align: center;
+      font-family: Helvetica, Sans-Serif;
+    }
+    .center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size:4vw;
+    }
+    button, select, input {
+      font-family: Arial,Helvetica,sans-serif;
+      font-size: 30px;
+    }
+  .stripe td:nth-child(even)
+  {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+  .block70 {
+	display: block;
+	width: 70%;
+	text-align: center;
+  }
+  .block {
+  display: block;
+  width: 100%;
+  border: none;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+}
+  .green {
+	background-color: #04AA6D;
+  }
+  .red {
+	background-color: red;
+  }
+</style>
+</head>
+<html>
+<h1 id="title">Wordle Words</h1>
+<hr/>
+<table class="center">
+  <tr><td><select class="block70" id="language">
+    <option value="es">Spanish</option>
+    <option value="en">English</option>
+  </select></td><td><button class="block red" onclick="clearfields();">CLEAR</button></td></tr>
+  <tr><td><input class="regexp" type="text" id='regularExp'></input></td><td><input class="regexp" type="text"  id='regularExp2'></input></td></tr>
+  <tr><td><input class="regexp" type="text" id='regularExp3'></input></td><td><input class="regexp" type="text" id='regularExp4'></input></td></tr>
+  <tr><td><input class="regexp" type="text" id='regularExp5'></input></td><td><input class="regexp" type="text" id='regularExp6'></input></td></tr>
+  <tr>
+  <td><button class="block green" onclick="filter(words[document.getElementById('language').value]);">FILTER!</button></td></tr>
+  <tr><td><div id="count"></div></td></tr>
+</table>
+
+<hr/>
+<table id="words_t" class="center stripe"></table>
+
+<script>
+function clearfields() {
+  var myElements = document.getElementsByClassName("regexp");
+  
+  for(var counter = 0; counter < myElements.length; counter++) {
+      myElements[counter].value = '';
+  }
+}	
+function filter(words) {
+  var table = document.getElementById('words_t');
+  table.innerHTML = "";
+  var tableBody = document.createElement('tbody');
+  var i =0;
+
+  var myElements = document.getElementsByClassName("regexp");
+
+  for(var counter = 0; counter < myElements.length; counter++) {
+      console.log(myElements[counter].value)
+      var filterS = new RegExp(myElements[counter].value.toLowerCase(), 'g');
+      words = words.filter((value) => value.match(filterS));
+  }
+
+  var row = document.createElement('tr');
+  words.forEach(function(cellData) {
+
+    if (i%5 == 0)
+      row = document.createElement('tr');
+
+    var cell = document.createElement('td');
+    cell.appendChild(document.createTextNode(cellData));
+    row.appendChild(cell);
+    tableBody.appendChild(row);
+    i=i+1;
+  });
+
+  table.appendChild(tableBody);
+  document.body.appendChild(table);
+
+  var s = document.getElementById('count');
+  s.innerText = i;
+}
+</script>
+
+</html>
